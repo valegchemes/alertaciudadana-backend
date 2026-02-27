@@ -13,7 +13,7 @@ export class UsersService {
 
   async findAll() {
     return this.usersRepository.find({
-      select: ['id', 'email', 'role', 'createdAt'], // ✅ excluye password
+      select: ['id', 'email', 'role', 'createdAt'],
     });
   }
 
@@ -27,7 +27,20 @@ export class UsersService {
     const user = this.usersRepository.create({
       ...userData,
       password: hashedPassword,
+      role: 'USER',
     });
+
+    return this.usersRepository.save(user);
+  }
+
+  async promoteToAdmin(id: number) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    user.role = 'ADMIN';
 
     return this.usersRepository.save(user);
   }
