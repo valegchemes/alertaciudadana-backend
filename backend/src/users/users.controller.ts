@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { User } from './user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -17,7 +17,7 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() userData: Partial<User>) {
+  create(@Body() userData: CreateUserDto) {
     return this.usersService.create(userData);
   }
 
