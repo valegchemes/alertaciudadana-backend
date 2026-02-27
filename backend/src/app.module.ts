@@ -12,24 +12,12 @@ import { AuthModule } from './auth/auth.module';
 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const databaseUrl = config.get<string>('DATABASE_URL');
-
-        return {
-          type: 'postgres',
-          url: databaseUrl,
-          autoLoadEntities: true,
-          synchronize: false,
-          ssl: {
-            rejectUnauthorized: false,
-          },
-          extra: {
-            ssl: {
-              rejectUnauthorized: false,
-            },
-          },
-        };
-      },
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        url: config.get<string>('DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: false,
+      }),
     }),
 
     UsersModule,
