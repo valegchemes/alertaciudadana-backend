@@ -14,12 +14,14 @@ import { UpdateReportStatusDto } from './dto/update-report-status.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   // ✅ USER crea reporte
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() dto: CreateReportDto, @Request() req) {
@@ -33,6 +35,7 @@ export class ReportsController {
   }
 
   // ✅ SOLO ADMIN cambia estado
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Patch(':id/status')

@@ -17,7 +17,14 @@ async function bootstrap() {
     .setTitle('AlertaCiudadana API')
     .setDescription('API oficial del sistema AlertaCiudadana')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'JWT-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
