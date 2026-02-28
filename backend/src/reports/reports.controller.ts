@@ -20,22 +20,19 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
-  // ✅ USER crea reporte
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() dto: CreateReportDto, @Request() req) {
     return this.reportsService.create(dto, req.user.userId);
   }
 
-  // ✅ Cualquiera puede ver reportes
   @Get()
   findAll() {
     return this.reportsService.findAll();
   }
 
-  // ✅ SOLO ADMIN cambia estado
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Patch(':id/status')
