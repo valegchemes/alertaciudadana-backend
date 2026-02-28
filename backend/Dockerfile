@@ -1,4 +1,3 @@
-# force redeploy 2
 FROM node:20-alpine
 
 WORKDIR /app
@@ -13,4 +12,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npm run migration:run && node dist/main"]
+CMD ["node", "dist/main"]
