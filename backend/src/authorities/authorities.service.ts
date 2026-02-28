@@ -1,4 +1,9 @@
-import { Injectable, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -56,5 +61,20 @@ export class AuthoritiesService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async verifyAuthority(id: number) {
+    const authority = await this.authorityRepository.findOne({
+      where: { id },
+    });
+
+    if (!authority) {
+      throw new NotFoundException('Authority not found');
+    }
+
+    authority.verificationStatus = VerificationStatus.VERIFIED;
+    authority.isActive = true;
+
+    return this.authorityRepository.save(authority);
   }
 }
